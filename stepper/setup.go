@@ -41,6 +41,11 @@ type Stepper struct {
 
 // Setup - Init a stepper
 func Setup(ID int, pins [4]uint8, spr uint) (s *Stepper) {
+	for _, pin := range pins {
+		rpio.Pin(pin).Output()
+		rpio.Pin(pin).Low()
+	}
+
 	return &Stepper{
 		ID:    ID,
 		pins:  pins,
@@ -61,7 +66,7 @@ func (s *Stepper) Move(speed float64, distance uint, direction Direction) (err e
 		s.Halt()
 	}
 
-	totalSteps := (distance / 2) * 1600
+	totalSteps := (distance / 2) * 1600 * 4
 	delay := time.Duration(60*1000*1000/(float64(s.spr)*speed)) * time.Microsecond
 
 	s.mutex.Lock()
@@ -107,6 +112,7 @@ func (s *Stepper) Move(speed float64, distance uint, direction Direction) (err e
 }
 
 func (s *Stepper) step(phase int) (err error) {
+
 	for i := range []int{0, 1, 2, 3} {
 		if phaseMatrix[phase][i] == 1 {
 			rpio.Pin(s.pins[i]).High()
@@ -123,5 +129,9 @@ func (s *Stepper) Halt() {
 	s.mutex.Lock()
 	s.running = false
 	s.mutex.Unlock()
+
+	for _, pin := range s.pins {
+		rpio.Pin(pin).Low()
+	}
 	return
 }

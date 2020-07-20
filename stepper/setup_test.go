@@ -29,7 +29,7 @@ func TestMove(t *testing.T) {
 	s = Setup(1, [4]uint8{2, 3, 4, 17}, 1600)
 
 	start := time.Now()
-	if err = s.Move(60, 2, Forward); err != nil {
+	if err = s.Move(60, 10, Forward); err != nil {
 		return
 	}
 	end := time.Now()
