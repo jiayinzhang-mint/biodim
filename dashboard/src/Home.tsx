@@ -179,7 +179,7 @@ function Home() {
                 </form>
               </CardContent>
               <CardActions className={classes.cardActions}>
-                <Button onClick={handleRunMotor(m)} variant='outlined' color='primary' startIcon={<Play />}>
+                <Button onClick={handleRunMotor(m)} variant={m.running ? 'contained' : 'outlined'} color='primary' startIcon={<Play />}>
                   Run
                 </Button>
                 <Button onClick={handleHaltMotor(m)} variant='outlined' startIcon={<Stop />}>
